@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "python-s3-bucket-cli-tools"
+version = "0.1.0"
+description = ""
+authors = ["Your Name <you@example.com>"]
+readme = "README.md"
+packages = [{include = "python_s3_bucket_cli_tools"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+boto3 = "^1.26.99"
+python-dotenv = "^1.0.0"
+logging = "^0.4.9.6"
+argparse = "^1.4.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

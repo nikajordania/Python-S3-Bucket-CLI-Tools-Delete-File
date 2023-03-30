@@ -3,7 +3,7 @@ from botocore.exceptions import ClientError
 from auth import init_client
 from bucket.crud import list_buckets, create_bucket, delete_bucket, bucket_exists
 from bucket.policy import read_bucket_policy, assign_policy
-from object.crud import download_file_and_upload_to_s3, get_objects
+from object.crud import download_file_and_upload_to_s3, get_objects, delete_file_from_s3
 from bucket.encryption import set_bucket_encryption, read_bucket_encryption
 import argparse
 
@@ -182,6 +182,12 @@ parser.add_argument(
     const="True",
     default="False")
 
+parser.add_argument(
+    "-del",
+    "--delete_file",
+    type=str,
+    help="Delete file",
+    default=None)
 
 def main():
     s3_client = init_client()
@@ -228,6 +234,9 @@ def main():
 
         if (args.list_objects == "True"):
             get_objects(s3_client, args.bucket_name)
+        
+        if args.delete_file:
+            delete_file_from_s3(s3_client, args.delete_file, args.bucket_name)
 
     if (args.list_buckets):
         buckets = list_buckets(s3_client)

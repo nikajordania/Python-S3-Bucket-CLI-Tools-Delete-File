@@ -1,8 +1,9 @@
 from urllib.request import urlopen
 import io
+import logging
 from hashlib import md5
 from time import localtime
-
+from botocore.exceptions import ClientError
 
 def get_objects(aws_s3_client, bucket_name) -> str:
   for key in aws_s3_client.list_objects(Bucket=bucket_name)['Contents']:
@@ -47,3 +48,19 @@ def upload_file_put(aws_s3_client, filename, bucket_name):
     aws_s3_client.put_object(Bucket=bucket_name,
                              Key="hello_put.txt",
                              Body=file.read())
+
+
+def delete_file_from_s3(aws_s3_client, file_name, bucket_name):
+    try:
+
+      object = aws_s3_client.get_object(Bucket=bucket_name, Key=file_name)
+      if object["Body"] is not None:
+
+        response = aws_s3_client.delete_object(Bucket=bucket_name, Key=file_name)
+        print(response)
+        print(f'The file {file_name} has been deleted from the bucket {bucket_name}.')
+
+    except ClientError as e:
+        logging.error(e)
+        return False
+    return True
